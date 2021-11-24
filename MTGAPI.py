@@ -1,12 +1,12 @@
 import requests
 from operator import attrgetter, itemgetter
-from mtgsdk import Card, Set
+from mtgsdk import *
 
 # Print cards with power 4 from rtr
-cards = Card.where(set='rtr').where(power=4).all()
+#cards = Card.where(set='rtr').where(power=4).all()
 
-for x in range(len(cards)):
-    print(cards[x].name)
+#for x in range(len(cards)):
+    #print(cards[x].name)
 
 # lets abstract that into a method
 def print_set_by_power(set, pow):
@@ -14,26 +14,47 @@ def print_set_by_power(set, pow):
     for x in range(len(cards)):
         print(cards[x].name)
 
-print_set_by_power("dom", 6)
+#print_set_by_power("dom", 6)
+
+# find cards from set where toughness is 5 or more greater than power
+def print_tough_5gt_power(set):
+    cards = Card.where(set=set).where(type="creature").all()
+    # temp contains all cards that match the parameter from the list of
+    # creatures in set
+    temp = []
+    for x in range(len(cards)):
+        # Filter out * power and toughness
+        if (cards[x].power != "*") and (cards[x].toughness != "*"):
+            if (int(cards[x].toughness) > (int(cards[x].power) + 4)):
+                temp.append(cards[x])
+    for x in range(len(temp)):
+        print(temp[x].name)
+
+print_tough_5gt_power("rtr")
 
 card = Card.find(253533)
 print(card.name)
 print(card.flavor)
 print(len(card.flavor))
+print(card.power)
+print(int(card.power))
 
-
-# Find all cards from a set and sort based on the length of their flavor text
-# Not working atm (weird type Error)
-def flavor_sort():
+# Find all cards from a set and sort based on power
+def power_sort():
     # call API to get list of cards from set
-    cards = Card.where(set="rtr").all()
-    #sort by power
-    cards = sorted(cards, key=attrgetter('power'))
-    # print list
+    cards = Card.where(set="rtr").where(type="creature").all()
+    temp = []
     for x in range(len(cards)):
-        print(len(cards[x].name)) #+ " " + len(cards[x].flavor))
+        # Filter out * power and toughness
+        if (cards[x].power != "*") and (cards[x].toughness != "*"):
+            temp.append(cards[x])
 
-flavor_sort()
+    # sort by power
+    # print list
+    for x in range(len(temp)):
+        print(temp[x].name + ": " + temp[x].power)
+
+power_sort()
 
 #response = requests.get("https://api.magicthegathering.io/v1/cards")
 #response.headers.get("Content-Type")
