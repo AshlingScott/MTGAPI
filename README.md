@@ -1,2 +1,2 @@
 # MTGAPI
-# Personal practice with using APIs
+Messing around with the MTGAPI
