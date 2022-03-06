@@ -1,6 +1,7 @@
 import requests
 from operator import attrgetter, itemgetter
 from mtgsdk import *
+import scrython
 
 # Print cards with power 4 from rtr
 #cards = Card.where(set='rtr').where(power=4).all()
@@ -54,10 +55,31 @@ def power_sort():
     for x in range(len(temp)):
         print(temp[x].name + ": " + temp[x].power)
 
-power_sort()
+#power_sort()
 
 #response = requests.get("https://api.magicthegathering.io/v1/cards")
 #response.headers.get("Content-Type")
 #print(response.headers.get("Content-Type"))
 
 #print(response.json())
+
+# SCRYTHON scryfall API wrapper
+# Get longest and shortest flavor text from a set of 100 random cards
+
+longest_flavor = ""
+shortest_flavor = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+for x in range(100):
+    card = scrython.cards.Random()
+    print(card.name())
+    try:
+        if (len(card.flavor_text()) > len(longest_flavor)):
+            longest_flavor = card.flavor_text()
+        if (len(card.flavor_text()) < len(shortest_flavor)):
+            shortest_flavor = card.flavor_text()
+    except:
+        print("no flavor")
+
+print(longest_flavor)
+print(shortest_flavor)
