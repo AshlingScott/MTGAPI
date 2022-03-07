@@ -64,6 +64,52 @@ def power_sort():
 #print(response.json())
 
 # SCRYTHON scryfall API wrapper
+
+# Guess which card has a higher CMC
+# Track the guesses
+correct_guesses = 0
+wrong_guesses = 0
+
+def cmc_guess():
+    global correct_guesses
+    global wrong_guesses
+    card1 = scrython.cards.Random()
+    card2 = scrython.cards.Random()
+    print(correct_guesses)
+    print("What has higher mana cost, " + card1.name() + " or " + card2.name() + "?")
+    print(card1.cmc())
+    print(card2.cmc())
+    print("1 - first card, 2 - second card, 3 - tie, 4 - exit")
+    ans = input()
+    if (ans == 1):
+        if (card1.cmc() > card2.cmc()):
+            print("Correct!")
+            correct_guesses += 1
+        else:
+            print("Wrong!")
+            wrong_guesses += 1
+    elif (ans == 2):
+        if (card2.cmc() > card1.cmc()):
+            print("Correct!")
+            correct_guesses += 1
+        else:
+            print("Wrong!")
+            wrong_guesses += 1
+    elif (ans == 3):
+        if (card2.cmc() == card1.cmc()):
+            print("Correct!")
+            correct_guesses += 1
+        else:
+            print("Wrong!")
+            wrong_guesses += 1
+
+    print("Correct guesses: " + str(correct_guesses))
+    print("Wrong guesses: " + str(wrong_guesses))
+    if (ans != 4):
+        cmc_guess()
+
+cmc_guess()
+
 # Get longest and shortest flavor text from a set of 100 random cards
 
 longest_flavor = ""
